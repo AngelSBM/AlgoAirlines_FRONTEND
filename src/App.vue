@@ -13,6 +13,15 @@
   color: #2c3e50;
 }
 
+body, html, #app{
+  height: 100%;
+  width: 100%;
+  background-color: rgb(233, 233, 233);
+  padding: 0;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
 nav {
   padding: 30px;
 
