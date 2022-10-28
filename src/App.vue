@@ -16,7 +16,7 @@
 body, html, #app{
   height: 100%;
   width: 100%;
-  background-color: rgb(233, 233, 233);
+  background-color: rgb(246, 246, 246);
   padding: 0;
   margin: 0;
   font-family: 'Open Sans', sans-serif;
