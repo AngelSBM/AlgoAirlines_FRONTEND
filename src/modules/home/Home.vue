@@ -27,8 +27,34 @@
             </div>
           </div>
         </div>
-        <div class="filter"></div>
-        <div class="filter"></div>
+        <div class="filter date-filters">
+
+            <div class="date-filter">
+              <label for="from-date">Fecha desde</label>
+              <input type="date" id="datepicker-from" name="from-date">
+            </div>
+
+            <div class="date-filter">
+              <label for="to-date">Fecha hasta</label>
+              <input type="date" id="datepicker-to" name="to-date">
+            </div>
+
+
+        </div>
+        <div class="filter passengers-filters">
+          <div class="passengers-filter-title">
+            Pasajeros
+          </div>
+          <div class="passenger-actions">
+            <i class="fa-solid fa-plus" @click="changePassengerNumber(1)"></i>
+            <i class="fa-solid fa-minus" @click="changePassengerNumber(-1)"></i>
+          </div>
+          <div class="passenger-number">
+            <i class="fa-solid fa-users"></i>
+            <div class="number">{{ passengersNumber }}</div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -36,8 +62,30 @@
 </template>
 
 <script>
-export default {
+// import flatpickr from "flatpickr";
+import moment from "moment";
 
+export default {
+  data(){
+    return{
+      passengersNumber: 0
+    }
+  },
+  mounted(){
+
+    const minDate = moment().format().split("T")[0];
+    document.getElementById('datepicker-from').setAttribute("min", minDate);
+    document.getElementById('datepicker-to').setAttribute("min", minDate);
+
+    
+  },
+  methods: {
+    changePassengerNumber(quantity){
+      if((this.passengersNumber + quantity) > 0){
+        this.passengersNumber += quantity;
+      }
+    }
+  }
 }
 </script>
 
@@ -95,6 +143,46 @@ export default {
           }
         }
       }
+      .date-filters{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          .date-filter{
+            label{
+              margin-right: 10px;
+            }
+            input{
+              width: 150px;
+            }
+          }
+        }
+      .passengers-filters{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        font-size: 20px;
+        .passenger-actions{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          width: 30px;
+          cursor: pointer;
+          background-color: firebrick;
+          height: 90%;
+        }
+        .passenger-number{
+          i{
+            font-size: 30px;
+          }
+        }
+      }
     }
   }  
+
+
+  input[type=”date”]{
+    border: none;
+    outline: none;
+  }
+
 </style>
