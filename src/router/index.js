@@ -17,7 +17,14 @@ const routes = [
     path: '/vuelos',
     name: 'vuelos',
     component: function () {
-      return import(/* webpackChunkName: "home" */ '@/modules/home/Flights')
+      return import(/* webpackChunkName: "flights" */ '@/modules/home/Flights')
+    }
+  },
+  {
+    path: '/pasajeros',
+    name: 'pasajeros',
+    component: function () {
+      return import(/* webpackChunkName: "passengers" */ '@/modules/home/Passengers')
     }
   },
 ]

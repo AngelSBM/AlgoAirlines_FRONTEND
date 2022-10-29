@@ -78,7 +78,6 @@ import { mapGetters } from 'vuex'
 export default {
     computed: {
         ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
-
     },
     methods: {
         selectFlight(flight){
@@ -86,6 +85,10 @@ export default {
                 this.$store.dispatch('flight/selectDepartureFlight', flight);
             }else{
                 this.$store.dispatch('flight/selectArrivalFlight', flight);
+            }
+
+            if(this.selectedFlight.departure && this.selectedFlight.arrive){
+                this.$router.push({name: 'pasajeros'})
             }
         },
         backToDepartureFlight(){
