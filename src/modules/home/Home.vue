@@ -7,23 +7,25 @@
           <div class="place-filter" type="button" data-toggle="modal" data-target="#exampleModal">
 
             <div class="place-abreviation">
-              Desde
+              {{ selectedFilter.placeFrom ? selectedFilter.placeFrom.nomenclatura : 'Desde' }}
             </div>
             <div class="place-name">
-              De donde sale
+              {{ selectedFilter.placeFrom ? selectedFilter.placeFrom.ciudad : 'De donde sale' }}
             </div>
+
+
           </div>
 
           <div class="double-arrow">
             <i class="fa-solid fa-arrows-left-right"></i>
           </div>
 
-          <div class="place-filter">
+          <div class="place-filter" type="button" data-toggle="modal" data-target="#exampleModal">
             <div class="place-abreviation">
-              Hacia
+              {{ selectedFilter.placeTo ? selectedFilter.placeTo.nomenclatura : 'Hasta' }}
             </div>
             <div class="place-name">
-              Su destino
+              {{ selectedFilter.placeTo ? selectedFilter.placeTo.ciudad : 'Hacia donde va' }}
             </div>
           </div>
         </div>
@@ -31,12 +33,12 @@
 
             <div class="date-filter">
               <label for="from-date">Fecha desde</label>
-              <input type="date" id="datepicker-from" name="from-date">
+              <input type="date" id="datepicker-from" name="from-date" @change="setSelectedDate('from')" v-model="dateFrom">
             </div>
 
             <div class="date-filter">
               <label for="to-date">Fecha hasta</label>
-              <input type="date" id="datepicker-to" name="to-date">
+              <input type="date" id="datepicker-to" name="to-date" @change="setSelectedDate('to')" v-model="dateTo">
             </div>
 
 
@@ -51,9 +53,12 @@
           </div>
           <div class="passenger-number">
             <i class="fa-solid fa-users"></i>
-            <div class="number">{{ passengersNumber }}</div>
+            <div class="number">{{ selectedFilter.passengers }}</div>
           </div>
 
+        </div>
+        <div class="search-button" @click="goToFlights">        
+          <i class="fa-solid fa-magnifying-glass"></i>
         </div>
       </div>
     </div>
@@ -68,20 +73,28 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title" id="exampleModalLabel">Escriba el aeropuerto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="modal-close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <input type="text" class="form-control mb-5" v-model="airportSearchValue">
+
+              <!-- AIRPORTS -->
+              <table class="table">
+                <tbody>
+                  <tr v-for="(airport, index) in filteredAirports" :key="index" style="cursor: pointer">
+                    <td @click="selectAirport(airport)">{{ airport.nomenclatura }} - {{ airport.ciudad }}</td> 
+                  </tr>
+                </tbody>
+              </table>
+
           </div>
         </div>
+
       </div>
+
     </div>
         
   </div>
@@ -94,6 +107,7 @@
 // import flatpickr from "flatpickr";
 import moment from "moment";
 import Flights from "./Flights.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -101,7 +115,32 @@ export default {
   },  
   data(){
     return{
-      passengersNumber: 0
+      dateFrom: null,
+      dateTo: null,
+      airportSearchValue: '',
+      airports: [
+        {
+          nomenclatura: 'SDQ',
+          ciudad: 'Santo Domingo'
+        },
+        {
+          nomenclatura: 'NW',
+          ciudad: 'Newark'
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapGetters('flight', ['selectedFilter']),
+    // selectedFilter(){
+    //   this.$store.getters["flight/selectedFilter"];
+    // },  
+    filteredAirports(){
+      if(this.airportSearchValue === ''){
+        return this.airports;
+      }
+      return this.airports.filter(airport => airport.ciudad.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()) 
+                            || airport.nomenclatura.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()));
     }
   },
   mounted(){
@@ -110,14 +149,33 @@ export default {
     document.getElementById('datepicker-from').setAttribute("min", minDate);
     document.getElementById('datepicker-to').setAttribute("min", minDate);
 
-    
   },
   methods: {
-    changePassengerNumber(quantity){
-      if((this.passengersNumber + quantity) > 0){
-        this.passengersNumber += quantity;
+    selectAirport(airport){
+      
+      this.$store.dispatch("flight/selectAirport", airport);
+      document.getElementById('modal-close').click();
+      this.airportSearchValue = '';
+
+    },
+    setSelectedDate(dateType){
+
+      if(dateType === 'from'){
+        this.$store.dispatch("flight/selectDate", {date: this.dateFrom, dateType });
       }
-    }
+
+      
+      if(dateType === 'to'){
+        this.$store.dispatch("flight/selectDate", {date: this.dateTo, dateType});
+      }
+
+    },
+    changePassengerNumber(quantity){
+      this.$store.dispatch('flight/changePassengersNumber', quantity);
+    },
+    goToFlights(){
+      this.$router.push({ name: 'vuelos'})
+    }    
   }
 }
 </script>
@@ -140,7 +198,7 @@ export default {
       height: 100%;
       .filter{
         height: 50%;
-        width: 30%;
+        width: 27%;
         background-color: rebeccapurple;        
         .place-filter{
           height: 30px;
@@ -207,6 +265,22 @@ export default {
           i{
             font-size: 30px;
           }
+        }
+      }
+      .search-button{
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50%;
+        background-color: forestgreen;
+        i{
+          font-size: 20px;
+          padding: 15px;
+          border-radius: 100%;
+          background-color: rgb(72, 4, 4);
+          color: white;
+          cursor: pointer;
         }
       }
     }

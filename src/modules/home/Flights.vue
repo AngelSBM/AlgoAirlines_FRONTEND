@@ -1,11 +1,37 @@
 <template>
   <div class="flights-container">
-    <div class="selected-filters">
+    <div class="selected-filters" v-if="selectedFilter.placeFrom">
+        <div class="container filters">
+            <div class="selected-places">                
+                {{ selectedFilter.placeFrom.nomenclatura }} - {{ selectedFilter.placeTo.nomenclatura }}                
+            </div>
+            <div class="selected-dates">
+                {{ selectedFilter.dateFrom }} - {{ selectedFilter.dateTo }}
+            </div>
+            <div class="selected-passengers">
+                {{ selectedFilter.passengers }} pasajeros
+            </div>
+        </div>
+    </div>
 
+    <div class="flight-type container">
+        
+        <div class="type" v-if="!selectedFlight.departure">
+            <i class="fa-solid fa-plane-departure"></i>
+            <div class="">Salida</div>
+        </div>
+        <div class="type" v-if="selectedFlight.departure">
+            <i class="fa-solid fa-plane-arrival"></i>
+            <div class="">Llegada</div>
+        </div>
+        
+        <button class="btn btn-primary" @click="backToDepartureFlight" v-if="selectedFlight.departure">
+            <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
     </div>
 
     <div class="flights">
-        <div class="flight" v-for="(flight, index) in [1,1,1]" :key="index">
+        <div class="flight" v-for="(flight, index) in [1,1,1]" :key="index" @click="selectFlight(flight)">
             <div class="flight-info">
                 <div class="info-place">
                     <div class="hour">
@@ -47,8 +73,25 @@
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex'
 
+export default {
+    computed: {
+        ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
+
+    },
+    methods: {
+        selectFlight(flight){
+            if(!this.selectedFlight.departure){
+                this.$store.dispatch('flight/selectDepartureFlight', flight);
+            }else{
+                this.$store.dispatch('flight/selectArrivalFlight', flight);
+            }
+        },
+        backToDepartureFlight(){
+            this.$store.dispatch('flight/deleteSelectedFlight');
+        }
+    }   
 }
 </script>
 
@@ -56,9 +99,37 @@ export default {
     .flights-container{
         padding-bottom: 50px;
         .selected-filters{
-            height: 100px;
+            height: 50px;
             background-color: #0c1d2d;
             margin-bottom: 40px;
+            font-weight: normal;
+            font-size: 17px;
+            .filters{
+                display: flex;
+                justify-content: space-between;
+                height: 100%;
+                div{
+                    background-color: blueviolet;
+                    width: 30%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+        }
+        .flight-type{
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 22px;
+            i{
+                margin-right: 15px;
+            }
+            .type{
+                display: flex;
+                align-items: center;
+            }
         }
         .flights{
             width: 90%;
@@ -74,7 +145,7 @@ export default {
                 grid-template-columns: 3fr 1fr;
                 cursor: pointer;
                 .flight-info{
-                    background-color: coral;
+                    background-color: rgb(139, 75, 52);
                     height: 100%;
                     display: grid;
                     grid-template-columns: 3fr 1fr 3fr;
