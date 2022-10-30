@@ -4,13 +4,70 @@
     <br>
     <br>
 
-    <div class="id-filler container d-flex justify-content-end">
-        <button class="btn btn-dark mb-4" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="searchClientInfo" id="fillInfoButton">
-            Rellenar datos con cédula
-        </button>
+    <div class="accordion container" id="accordionExample" style="padding-bottom: 30px">
+
+
+        <div class="card" v-for="(passenger, index) in selectedFilter.passengers" :key="index">
+            <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" :data-target="'#collapse' + index" aria-expanded="true" aria-controls="collapseOne">
+                    Pasajero {{ index + 1 }}
+                </button>
+            </h2>
+            </div>
+
+            <div :id="'collapse' + index" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+
+                    <div class="id-filler container d-flex justify-content-end">
+                        <button class="btn btn-dark mb-4" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @click="searchClientInfo(index)" id="fillInfoButton">
+                            Rellenar datos con cédula
+                        </button>
+                    </div>
+
+
+                    <div class="form-container">
+                        <div class="client-pic">
+                            <img alt="" :id="'imageId' + index">
+                        </div>
+
+                        <form action="">
+                            <div class="field">
+                                <div class="label">Nombre:</div>
+                                <input type="text" name="" :id="'inputNombre' + index" class="form-control" >
+                            </div>
+
+                            <div class="field">
+                                <div class="label">Apellido:</div>
+                                <input type="text" name="" :id="'inputApellido' + index" class="form-control" >
+                            </div>
+
+                            <div class="field">
+                                <div class="label">Fecha de nacimiento:</div>
+                                <input type="date" name="" :id="'inputFecha' + index" class="form-control" >
+                            </div>
+
+                            <div class="field">
+                                <div class="label">Cédula:</div>
+                                <input type="text" name="" :id="'inputCedula' + index" class="form-control" >
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="button-field m-5">
+            <button class="btn btn-primary" @click="savePassengerInfo">
+                Guardar
+            </button>
+        </div>
+
     </div>
 
-    <div class="form-container">
+    <!-- <div class="form-container">
         <div class="client-pic" v-if="clientPicture !== ''">
             <img :src="clientPicture" alt="">
         </div>
@@ -36,26 +93,6 @@
                 <input type="text" name="" id="" class="form-control" v-model="form.cedula">
             </div>
 
-            <!-- <div class="field">
-                <div class="label">Sexo:</div>
-                <select class="form-select" aria-label="Default select example" v-model="form.sexo">
-                    <option selected>Elegir</option>
-                    <option value="1">Masculino</option>
-                    <option value="2">Femenino</option>
-                </select>
-            </div> -->
-
-            <!-- <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label" for="defaultCheck1">
-                    M
-                </label>
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                <label class="form-check-label" for="defaultCheck1">
-                    M
-                </label>
-            </div> -->
-
             <div class="button-field">
                 <button class="btn btn-primary">
                     Guardar
@@ -63,9 +100,7 @@
             </div>
             
         </form>
-    </div>
-
-
+    </div> -->
 
     <!-- MODAL -->
     
@@ -97,16 +132,50 @@ export default {
         ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
     },
     methods:{
-        async searchClientInfo(){
-            const info = await obtenerDatosCliente(this.form.cedula);
-            console.log(info);
-            this.form.nombre = info.Nombres
-            this.form.apellido = info.Apellido1 + ' ' + info.Apellido2
-            this.form.sexo = info.IdSexo 
-            this.form.fechaNacimiento = info.FechaNacimiento.split(' ')[0].slice(0, 10)
-            this.clientPicture = info.foto
+        async searchClientInfo(index){
 
-        }
+            const inputNombre = document.getElementById('inputNombre' + index);
+            const inputApellido = document.getElementById('inputApellido' + index);
+            const inputFecha = document.getElementById('inputFecha' + index);
+            const inputCedula = document.getElementById('inputCedula' + index);
+            const imageId = document.getElementById('imageId' + index);
+            const info = await obtenerDatosCliente(inputCedula.value);            
+
+            inputNombre.value = info.Nombres
+            inputApellido.value = info.Apellido1 + ' ' + info.Apellido2
+            inputFecha.value = info.FechaNacimiento.split(' ')[0].slice(0, 10)
+            imageId.src = info.foto;
+
+            return
+            // this.clientPicture = info.foto
+
+        },
+        async savePassengerInfo(){
+            
+            let passengers = [];
+
+            for (let i = 0; i < this.selectedFilter.passengers; i++) {
+
+
+                const inputNombre = document.getElementById('inputNombre' + i);
+                const inputApellido = document.getElementById('inputApellido' + i);
+                const inputFecha = document.getElementById('inputFecha' + i);
+                const inputCedula = document.getElementById('inputCedula' + i);                
+
+                const passengerInfo = {
+                    Nombre: inputNombre.value,
+                    Apellido: inputApellido.value,
+                    Fecha: inputFecha.value,
+                    Cedula: inputCedula.value
+                }
+
+                passengers.push(passengerInfo)
+
+            }
+
+            console.log('PASSENGERS', passengers);
+            
+        } 
     }
 }
 </script>
@@ -115,6 +184,9 @@ export default {
 
     .pasajeros-container{
         height: 100%;
+        .title{
+            font-size: 30px;
+        }
         .form-container{
             width: 50%;
             margin: 0 auto;
