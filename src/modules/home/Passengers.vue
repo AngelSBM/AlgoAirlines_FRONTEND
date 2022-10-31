@@ -165,7 +165,7 @@ export default {
                 const passengerInfo = {
                     Nombre: inputNombre.value,
                     Apellido: inputApellido.value,
-                    Fecha: inputFecha.value,
+                    FechaNacimiento: inputFecha.value,
                     Cedula: inputCedula.value
                 }
 
@@ -173,7 +173,8 @@ export default {
 
             }
 
-            console.log('PASSENGERS', passengers);
+            this.$store.dispatch('flight/updatePassengersInfo', passengers);
+            this.$router.push({ name: 'resumen' })
             
         } 
     }

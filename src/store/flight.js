@@ -7,7 +7,8 @@ export default {
             placeTo: null,
             dateFrom: null,
             dateTo: null,
-            passengers: 0
+            passengers: 0,
+            passengersInfo: []
         },
         selectedFlight:{
             departure: null,
@@ -42,6 +43,10 @@ export default {
               state.selectedFilter.passengers += quantity;
             }
         },     
+
+        setPassengers(state, passengers){
+            state.selectedFilter.passengersInfo = passengers;
+        },
         
         setDepartureFlight(state, flight){
             state.selectedFlight.departure = flight;
@@ -50,6 +55,7 @@ export default {
         setArrivalFlight(state, flight){
             state.selectedFlight.arrive = flight;
         },
+
 
         deleteSelectedFlight(state){
             state.selectedFlight.departure = null
@@ -82,6 +88,10 @@ export default {
 
         async selectArrivalFlight({commit}, flight){
             commit('setArrivalFlight', flight)
+        },
+
+        async updatePassengersInfo({commit}, passengers){
+            commit('setPassengers', passengers)
         },
 
         async deleteSelectedFlight({commit}){
