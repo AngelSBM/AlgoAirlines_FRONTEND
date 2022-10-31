@@ -64,9 +64,8 @@
     </div>
 
 
-    <!-- VUELOS -->
-    <!-- <Flights></Flights> -->
-
+    <!-- MAIN CONTENT -->
+    <main-page></main-page>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -108,10 +107,12 @@
 import moment from "moment";
 import Flights from "./Flights.vue";
 import { mapGetters } from 'vuex';
+import MainPage from './MainPage.vue';
 
 export default {
   components: {
-    Flights
+    Flights,
+    mainPage: MainPage
   },  
   data(){
     return{
@@ -183,8 +184,9 @@ export default {
 <style lang="scss" scoped>
 
   .main-page{
+    height: 100%;
     .main-header{
-      height: 250px;
+      height: 180px;
       background-color: #0c1d2d;
     }
     .filters{
