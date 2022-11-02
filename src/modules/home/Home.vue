@@ -7,7 +7,7 @@
           <div class="place-filter" type="button" data-toggle="modal" data-target="#exampleModal">
 
             <div class="place-abreviation">
-              {{ selectedFilter.placeFrom ? selectedFilter.placeFrom.nomenclatura : 'Desde' }}
+              {{ selectedFilter.placeFrom ? selectedFilter.placeFrom.nombre : 'Desde' }}
             </div>
             <div class="place-name">
               {{ selectedFilter.placeFrom ? selectedFilter.placeFrom.ciudad : 'De donde sale' }}
@@ -22,7 +22,7 @@
 
           <div class="place-filter" type="button" data-toggle="modal" data-target="#exampleModal">
             <div class="place-abreviation">
-              {{ selectedFilter.placeTo ? selectedFilter.placeTo.nomenclatura : 'Hasta' }}
+              {{ selectedFilter.placeTo ? selectedFilter.placeTo.nombre : 'Hasta' }}
             </div>
             <div class="place-name">
               {{ selectedFilter.placeTo ? selectedFilter.placeTo.ciudad : 'Hacia donde va' }}
@@ -84,7 +84,7 @@
               <table class="table">
                 <tbody>
                   <tr v-for="(airport, index) in filteredAirports" :key="index" style="cursor: pointer">
-                    <td @click="selectAirport(airport)">{{ airport.nomenclatura }} - {{ airport.ciudad }}</td> 
+                    <td @click="selectAirport(airport)">{{ airport.nombre }} - {{ airport.ciudad }}</td> 
                   </tr>
                 </tbody>
               </table>
@@ -119,20 +119,21 @@ export default {
       dateFrom: null,
       dateTo: null,
       airportSearchValue: '',
-      airports: [
-        {
-          nomenclatura: 'SDQ',
-          ciudad: 'Santo Domingo'
-        },
-        {
-          nomenclatura: 'NW',
-          ciudad: 'Newark'
-        }
-      ]
+      // airports: [
+      //   {
+      //     nomenclatura: 'SDQ',
+      //     ciudad: 'Santo Domingo'
+      //   },
+      //   {
+      //     nomenclatura: 'NW',
+      //     ciudad: 'Newark'
+      //   }
+      // ]
     }
   },
   computed: {
     ...mapGetters('flight', ['selectedFilter']),
+    ...mapGetters('airport', ['airports']),
     // selectedFilter(){
     //   this.$store.getters["flight/selectedFilter"];
     // },  
@@ -140,8 +141,8 @@ export default {
       if(this.airportSearchValue === ''){
         return this.airports;
       }
-      return this.airports.filter(airport => airport.ciudad.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()) 
-                            || airport.nomenclatura.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()));
+      return this.airports.filter(airport => airport.nombre.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()) 
+                            || airport.ciudad.toLowerCase().includes(this.airportSearchValue.toLocaleLowerCase()));
     }
   },
   mounted(){
@@ -151,6 +152,9 @@ export default {
     document.getElementById('datepicker-to').setAttribute("min", minDate);
 
   },
+  async created(){
+    await this.$store.dispatch('airport/obtenerAeropuertos')
+  },  
   methods: {
     selectAirport(airport){
       
@@ -162,14 +166,19 @@ export default {
     setSelectedDate(dateType){
 
       if(dateType === 'from'){
-        this.$store.dispatch("flight/selectDate", {date: this.dateFrom, dateType });
+        this.$store.dispatch("flight/selectDate", {date: this.transformDate(this.dateFrom), dateType });
       }
 
       
       if(dateType === 'to'){
-        this.$store.dispatch("flight/selectDate", {date: this.dateTo, dateType});
+        this.$store.dispatch("flight/selectDate", {date: this.transformDate(this.dateTo), dateType});
       }
 
+    },
+    transformDate(date = ''){
+      const splittedDate = date.split('-');
+      const newFormatDate = `${splittedDate[0]}-${splittedDate[2]}-${splittedDate[1]}`
+      return newFormatDate;
     },
     changePassengerNumber(quantity){
       this.$store.dispatch('flight/changePassengersNumber', quantity);
