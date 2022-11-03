@@ -1,3 +1,5 @@
+import * as api from '@/api/generalApi';
+
 export default {
     namespaced: true,
 
@@ -13,12 +15,14 @@ export default {
         selectedFlight:{
             departure: null,
             arrive: null
-        }
+        },
+        flights: []
     },
 
     getters: {
         selectedFilter: state => state.selectedFilter,
-        selectedFlight: state => state.selectedFlight
+        selectedFlight: state => state.selectedFlight,
+        flights: state => state.flights,
     },
 
     mutations: {
@@ -56,6 +60,9 @@ export default {
             state.selectedFlight.arrive = flight;
         },
 
+        setFlight(state, flights){
+            state.flights = flights;
+        },
 
         deleteSelectedFlight(state){
             state.selectedFlight.departure = null
@@ -65,6 +72,12 @@ export default {
     actions: {
         async selectAirport({commit}, airport){
             commit('selectAirport', airport)
+        },
+
+        //TODO: TRAER VUELOS CON FILTROS SELECCIONADOS
+        async searchFlights({commit}, filters){
+            const response = await api.searchFlights(filters);
+            commit('setFlight', response);
         },
 
         async selectDate({commit}, {date, dateType}){

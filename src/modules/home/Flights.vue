@@ -3,7 +3,7 @@
     <div class="selected-filters" v-if="selectedFilter.placeFrom">
         <div class="container filters">
             <div class="selected-places">                
-                {{ selectedFilter.placeFrom.nomenclatura }} - {{ selectedFilter.placeTo.nomenclatura }}                
+                {{ selectedFilter.placeFrom.nombre }} - {{ selectedFilter.placeTo.nombre }}                
             </div>
             <div class="selected-dates">
                 {{ selectedFilter.dateFrom }} - {{ selectedFilter.dateTo }}
@@ -94,6 +94,17 @@ export default {
         backToDepartureFlight(){
             this.$store.dispatch('flight/deleteSelectedFlight');
         }
+    },
+    async created(){
+        const filters = {
+            desdeId: this.selectedFilter.placeFrom.id,
+            hastaId: this.selectedFilter.placeTo.id,
+            fechaDesde: this.selectedFilter.dateFrom,            
+            fechaHasta: this.selectedFilter.dateTo
+        };
+
+        // console.log(filters);
+        await this.$store.dispatch('flight/searchFlights', filters)
     }   
 }
 </script>
