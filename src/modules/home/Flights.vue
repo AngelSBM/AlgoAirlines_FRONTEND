@@ -31,14 +31,15 @@
     </div>
 
     <div class="flights">
-        <div class="flight" v-for="(flight, index) in [1,1,1]" :key="index" @click="selectFlight(flight)">
+        <div class="flight" v-for="(flight, index) in filteredFlights" :key="index" @click="selectFlight(flight)">
+            <span class="flight-number">No. Vuelo: {{ flight.publicId }}</span>
             <div class="flight-info">
                 <div class="info-place">
                     <div class="hour">
-                        8:00 PM
+                        {{ pipeDate(flight.fechaSalida) }}
                     </div>
                     <div class="place">
-                        SDQ
+                        {{ flight.lugarSalida.nombre }}
                     </div>
                 </div>
 
@@ -50,10 +51,10 @@
 
                 <div class="info-place">
                     <div class="hour">
-                        11:00 PM
+                        {{ pipeDate(flight.fechaLlegada) }}
                     </div>
                     <div class="place">
-                        JFK
+                        {{ flight.lugarLlegada.nombre }}
                     </div>
                 </div>
                 
@@ -77,7 +78,17 @@ import { mapGetters } from 'vuex'
 
 export default {
     computed: {
-        ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
+        ...mapGetters('flight', ['selectedFilter', 'selectedFlight', 'flights']),
+        filteredFlights(){
+
+
+            if(!this.selectedFlight.departure){
+                return this.flights.filter(flight => flight.lugarSalida.id === this.selectedFilter.placeFrom.id)
+            }else{
+                return this.flights.filter(flight => flight.lugarSalida.id === this.selectedFilter.placeTo.id)
+            }
+
+        }
     },
     methods: {
         selectFlight(flight){
@@ -94,6 +105,9 @@ export default {
         backToDepartureFlight(){
             this.$store.dispatch('flight/deleteSelectedFlight');
         },
+        pipeDate(date = ''){
+            return date.split('T')[1];
+        }
     },
     async created(){
         const filters = {
@@ -158,6 +172,17 @@ export default {
                 display: grid;     
                 grid-template-columns: 3fr 1fr;
                 cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                .flight-number{
+                    position: absolute;
+                    padding: 3px;
+                    top: -30px;
+                    left: 32%;
+                    background-color: #153c60;
+                    color: white;
+                    transition: .3s ease all;
+                }
                 .flight-info{
                     background-color: rgb(139, 75, 52);
                     height: 100%;
@@ -202,6 +227,11 @@ export default {
                             font-weight: lighter;
                             font-size: 14px;
                         }
+                }
+                &:hover{
+                    .flight-number{
+                        transform: translateY(30px);
+                    }
                 }
             }
         }

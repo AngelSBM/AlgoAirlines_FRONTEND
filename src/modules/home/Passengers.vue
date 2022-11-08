@@ -51,6 +51,11 @@
                                 <div class="label">Cédula:</div>
                                 <input type="text" name="" :id="'inputCedula' + index" class="form-control" >
                             </div>
+
+                            <div class="field">
+                                <div class="label">Pasaporte:</div>
+                                <input type="text" name="" :id="'inputPasaporte' + index" class="form-control" >
+                            </div>
                             
                         </form>
                     </div>
@@ -161,12 +166,14 @@ export default {
                 const inputApellido = document.getElementById('inputApellido' + i);
                 const inputFecha = document.getElementById('inputFecha' + i);
                 const inputCedula = document.getElementById('inputCedula' + i);                
+                const inputPasaporte = document.getElementById('inputPasaporte' + i);                
 
                 const passengerInfo = {
                     Nombre: inputNombre.value,
                     Apellido: inputApellido.value,
                     FechaNacimiento: inputFecha.value,
-                    Cedula: inputCedula.value
+                    Cedula: inputCedula.value,
+                    Pasaporte: inputPasaporte.value
                 }
 
                 passengers.push(passengerInfo)

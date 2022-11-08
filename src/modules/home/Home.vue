@@ -197,9 +197,10 @@ export default {
     .main-header{
       height: 180px;
       background-color: #0c1d2d;
+      color: white;
     }
     .filters{
-      background-color: bisque;
+      // background-color: bisque;
       width: 90%;
       max-width: 1000px;
       margin: 0 auto;
@@ -210,7 +211,7 @@ export default {
       .filter{
         height: 50%;
         width: 27%;
-        background-color: rebeccapurple;        
+        // background-color: rebeccapurple;        
         .place-filter{
           height: 30px;
         }
@@ -227,7 +228,7 @@ export default {
       .places-filter{
         display: flex;        
         .place-filter{
-          background-color: aqua;
+          // background-color: aqua;
           height: 100%;
           width: 40%;
           display: flex;
@@ -269,7 +270,7 @@ export default {
           justify-content: space-around;
           width: 30px;
           cursor: pointer;
-          background-color: firebrick;
+          // background-color: firebrick;
           height: 90%;
         }
         .passenger-number{
@@ -284,7 +285,7 @@ export default {
         justify-content: center;
         align-items: center;
         height: 50%;
-        background-color: forestgreen;
+        // background-color: forestgreen;
         i{
           font-size: 20px;
           padding: 15px;
