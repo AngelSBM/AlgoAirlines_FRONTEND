@@ -177,7 +177,7 @@ export default {
     },
     transformDate(date = ''){
       const splittedDate = date.split('-');
-      const newFormatDate = `${splittedDate[0]}-${splittedDate[2]}-${splittedDate[1]}`
+      const newFormatDate = `${splittedDate[0]}-${splittedDate[1]}-${splittedDate[2]}`
       return newFormatDate;
     },
     changePassengerNumber(quantity){

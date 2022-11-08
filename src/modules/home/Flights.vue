@@ -93,7 +93,7 @@ export default {
         },
         backToDepartureFlight(){
             this.$store.dispatch('flight/deleteSelectedFlight');
-        }
+        },
     },
     async created(){
         const filters = {
