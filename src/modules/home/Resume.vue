@@ -62,6 +62,10 @@
                             <td>Cédula:</td>
                             <td>{{ passenger.Cedula }}</td>
                         </tr>
+                        <tr>
+                            <td>Pasaporte:</td>
+                            <td>{{ passenger.Pasaporte }}</td>
+                        </tr>
                     </tbody>
                 </table>
 

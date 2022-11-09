@@ -118,7 +118,7 @@
 
 import { mapGetters } from 'vuex'
 import obtenerDatosCliente from "@/api/cedulaApi";
-
+import Swal from 'sweetalert2'
 
 export default {
     data(){
@@ -158,6 +158,7 @@ export default {
         async savePassengerInfo(){
             
             let passengers = [];
+            let passengersInfoValid = true;
 
             for (let i = 0; i < this.selectedFilter.passengers; i++) {
 
@@ -176,14 +177,33 @@ export default {
                     Pasaporte: inputPasaporte.value
                 }
 
+                Object.values(passengerInfo).forEach(passengerInfo => {
+                    if(passengerInfo === ''){ 
+                        passengersInfoValid = false
+                     }
+                });
+
                 passengers.push(passengerInfo)
 
+            }
+
+
+            if(!passengersInfoValid){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'La información de todos los pasasjeros es obligatoria',
+                })
+                return
             }
 
             this.$store.dispatch('flight/updatePassengersInfo', passengers);
             this.$router.push({ name: 'resumen' })
             
-        } 
+        },
+        async validPassengersInfo(){
+
+        }
     }
 }
 </script>
