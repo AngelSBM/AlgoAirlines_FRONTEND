@@ -198,12 +198,9 @@ export default {
             }
 
             this.$store.dispatch('flight/updatePassengersInfo', passengers);
-            this.$router.push({ name: 'resumen' })
+            this.$router.push({ name: 'asientos' })
             
         },
-        async validPassengersInfo(){
-
-        }
     }
 }
 </script>

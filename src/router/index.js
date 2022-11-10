@@ -28,6 +28,13 @@ const routes = [
     }    
   },
   {
+    path: '/asientos',
+    name: 'asientos',
+    component: function () {
+      return import(/* webpackChunkName: "passengers" */ '@/modules/home/Seats')
+    }    
+  },
+  {
     path: '/resumen',
     name: 'resumen',
     component: function () {
