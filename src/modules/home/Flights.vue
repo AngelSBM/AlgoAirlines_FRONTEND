@@ -18,11 +18,11 @@
         
         <div class="type" v-if="!selectedFlight.departure">
             <i class="fa-solid fa-plane-departure"></i>
-            <div class="">Salida</div>
+            <div class="">Ida</div>
         </div>
         <div class="type" v-if="selectedFlight.departure">
-            <i class="fa-solid fa-plane-arrival"></i>
-            <div class="">Llegada</div>
+            <i class="fa-solid fa-plane-departure"></i>
+            <div class="">Vuelta</div>
         </div>
         
         <button class="btn btn-primary" @click="backToDepartureFlight" v-if="selectedFlight.departure">
@@ -93,9 +93,9 @@ export default {
     methods: {
         selectFlight(flight){
             if(!this.selectedFlight.departure){
-                this.$store.dispatch('flight/selectDepartureFlight', flight);
+                this.$store.dispatch('flight/selectDepartureFlight', {...flight, tipoVuelo: 'ida'});
             }else{
-                this.$store.dispatch('flight/selectArrivalFlight', flight);
+                this.$store.dispatch('flight/selectArrivalFlight', {...flight, tipoVuelo: 'vuelta'});
             }
 
             if(this.selectedFlight.departure && this.selectedFlight.arrive){
@@ -137,7 +137,8 @@ export default {
                 justify-content: space-between;
                 height: 100%;
                 div{
-                    background-color: blueviolet;
+                    // background-color: blueviolet;
+                    color: white;
                     width: 30%;
                     height: 100%;
                     display: flex;
@@ -166,7 +167,7 @@ export default {
                    
             .flight{
                 height: 200px;
-                background-color: rgb(121, 121, 121);
+                // background-color: rgb(121, 121, 121);
                 margin-bottom: 20px;
                 border-radius: 5px;
                 display: grid;     
@@ -174,6 +175,7 @@ export default {
                 cursor: pointer;
                 position: relative;
                 overflow: hidden;
+                border: 1px solid rgb(118, 118, 118);
                 .flight-number{
                     position: absolute;
                     padding: 3px;
@@ -182,14 +184,15 @@ export default {
                     background-color: #153c60;
                     color: white;
                     transition: .3s ease all;
+                    z-index: 1000;
                 }
                 .flight-info{
-                    background-color: rgb(139, 75, 52);
+                    // background-color: rgb(139, 75, 52);
                     height: 100%;
                     display: grid;
                     grid-template-columns: 3fr 1fr 3fr;
                     .info-place{
-                        background-color: forestgreen;
+                        // background-color: forestgreen;
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -209,8 +212,9 @@ export default {
                     align-items: center;
                     font-size: 40px;
                     position: relative;
+                    background-color: rgb(10, 11, 34);                    
                     i{
-                        color: #0c1d2d;
+                        color: white;
                     }
                 
                 }
@@ -220,6 +224,7 @@ export default {
                         align-items: center;
                         flex-direction: column;
                         height: 100%;
+                        border-left: 1px solid #000;
                         .price{
                             font-size: 25px;
                         }

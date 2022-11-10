@@ -1,6 +1,5 @@
 <template>
-  <div class="select-passenger-container row mt-5">
-    
+  <div class="select-passenger-container row mt-5">    
     <div class="current-passenger col-6">
         <span class="title">Seleccionar asiento para:</span>
         <div class="passenger mt-1">{{ currentPassengerSelected.Nombre }}</div>
@@ -16,6 +15,7 @@
         </div>
     </div>
 
+    <!-- <h2 class="mb-4">Asientos</h2> -->
     <div class="seats-container col-6">
     <div class="hallway"></div>
 
@@ -35,7 +35,7 @@ import { mapGetters } from 'vuex';
 export default {
     data(){
         return {
-            selectedSeats: [20],
+            selectedSeats: [],
             currentPassenger: 1,
             passengersUpdated: []
         }
@@ -123,19 +123,20 @@ export default {
     }
 
     .seats-container{
-        background-color: aquamarine;
+        /* background-color: aquamarine; */
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
         justify-content: center;
         position: relative;
         text-align: center;
+        border: 1px solid black;
     }
 
     .hallway{
         position: absolute;
         height: 100%;
         width: 20px;
-        background-color: bisque;
+        background-color: rgb(67, 67, 67);
         left: 45%;
     }
 
