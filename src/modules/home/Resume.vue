@@ -44,7 +44,7 @@
                         </tr>
                         <tr>
                             <td>Numero asiento:</td>
-                            <td>{{ ticket.NumeroAsiento }}</td>
+                            <td>{{ ticket.NumeroAsientoIda }}</td>
                         </tr>
 
                     </tbody>
@@ -91,7 +91,7 @@
                         </tr>
                         <tr>
                             <td>Numero asiento:</td>
-                            <td>{{ ticket.NumeroAsiento }}</td>
+                            <td>{{ ticket.NumeroAsientoVuelta }}</td>
                         </tr>
 
                     </tbody>
@@ -102,98 +102,19 @@
 
         </div>
 
-        <!-- <div class="info container">
-            <div class="table-title">Ida</div>
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td>Fecha salida:</td>
-                        <td>{{ selectedFilter.dateFrom }}</td>
-                    </tr>
-                    <tr>
-                        <td>Lugar salida:</td>
-                        <td>{{ selectedFilter.placeFrom.nombre }} - {{ selectedFilter.placeFrom.ciudad }}</td>
-                    </tr>
-                    <tr>
-                        <td>Lugar llegada:</td>
-                        <td>{{ selectedFilter.placeTo.nombre }} - {{ selectedFilter.placeTo.ciudad }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <payment></payment>
 
-
-            <div class="table-title">Vuelta</div>
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td>Fecha salida:</td>
-                        <td>12-10-2022</td>
-                    </tr>
-                    <tr>
-                        <td>Lugar llegada:</td>
-                        <td>{{ selectedFilter.placeTo.nombre }} - {{ selectedFilter.placeTo.ciudad }}</td>
-                    </tr>
-                    <tr>
-                        <td>Lugar salida:</td>
-                        <td>{{ selectedFilter.placeFrom.nombre }} - {{ selectedFilter.placeFrom.ciudad }}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="" v-for="(passenger, index) in selectedFilter.passengersInfo" :key="index">
-
-                <div class="table-title">Pasajero 1</div>
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <td>Nombre</td>
-                            <td>{{ passenger.Nombre }}</td>
-                        </tr>
-                        <tr>
-                            <td>Apellidos:</td>
-                            <td>{{ passenger.Apellido }}</td>
-                        </tr>
-                        <tr>
-                            <td>Fecha de nacimiento:</td>
-                            <td>{{ passenger.FechaNacimiento }}</td>
-                        </tr>
-                        <tr>
-                            <td>Cédula:</td>
-                            <td>{{ passenger.Cedula }}</td>
-                        </tr>
-                        <tr>
-                            <td>Pasaporte:</td>
-                            <td>{{ passenger.Pasaporte }}</td>
-                        </tr>
-                        <tr>
-                            <td>Numero de asiento:</td>
-                            <td>{{ passenger.NumeroAsiento }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-
-            <div class="button m-5">
-                <button class="btn btn-success block">
-                    Agendar
-                </button>
-            </div>
-            <div class="button m-5">
-                <button class="btn btn-danger">
-                    Desestimar
-                </button>
-            </div>
-
-        </div> -->
     </div>
 
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Payment from './Payment.vue'
 export default {
-
+    components:{
+        Payment
+    },  
     computed: {
         ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
         ticketsIda(){

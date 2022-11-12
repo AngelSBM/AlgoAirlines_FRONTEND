@@ -77,7 +77,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-    computed: {
+        computed: {
         ...mapGetters('flight', ['selectedFilter', 'selectedFlight', 'flights']),
         filteredFlights(){
 
@@ -106,7 +106,21 @@ export default {
             this.$store.dispatch('flight/deleteSelectedFlight');
         },
         pipeDate(date = ''){
-            return date.split('T')[1];
+
+            
+            const time = date.split('T')[1];
+            const time_part_array = time.split(":");
+            let ampm = 'AM';
+            if (time_part_array[0] >= 12) {
+                ampm = 'PM';
+            }
+            if (time_part_array[0] > 12) {
+                time_part_array[0] = time_part_array[0] - 12;
+            }
+            const formatted_time = time_part_array[0] + ':' + time_part_array[1] + ':' + time_part_array[2] + ' ' + ampm;
+            return formatted_time;
+                
+
         }
     },
     async created(){

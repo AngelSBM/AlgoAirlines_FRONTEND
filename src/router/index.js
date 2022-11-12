@@ -35,6 +35,13 @@ const routes = [
     }    
   },
   {
+    path: '/asientos-vuelta',
+    name: 'asientosVuelta',
+    component: function () {
+      return import(/* webpackChunkName: "passengers" */ '@/modules/home/SeatsBack')
+    }    
+  },
+  {
     path: '/resumen',
     name: 'resumen',
     component: function () {

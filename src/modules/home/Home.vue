@@ -108,6 +108,7 @@ import moment from "moment";
 import Flights from "./Flights.vue";
 import { mapGetters } from 'vuex';
 import MainPage from './MainPage.vue';
+import Swal from 'sweetalert2';
 
 export default {
   components: {
@@ -184,7 +185,23 @@ export default {
       this.$store.dispatch('flight/changePassengersNumber', quantity);
     },
     goToFlights(){
+      if(     !this.selectedFilter.placeFrom 
+          || !this.selectedFilter.placeTo 
+          || !this.selectedFilter.dateFrom 
+          || !this.selectedFilter.dateTo 
+          || this.selectedFilter.passengers === 0){
+
+            Swal.fire({
+                    icon: 'info',
+                    title: 'ERROR',
+                    text: 'Los filtros son obligatorios.',
+            })
+            return
+
+      }
+
       this.$router.push({ name: 'vuelos'})
+
     }    
   }
 }

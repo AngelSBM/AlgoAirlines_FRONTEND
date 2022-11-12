@@ -1,7 +1,7 @@
 <template>
   <div class="select-passenger-container row mt-5">    
     <div class="current-passenger col-6">
-        <span class="title">Seleccionar asiento para el vuelo de ida para:</span>
+        <span class="title">Seleccionar asiento para el vuelo de vuelta para:</span>
         <div class="passenger mt-1">{{ currentPassengerSelected.Nombre }}</div>
         <div class="button-container">
             <button class="btn btn-info mt-5">
@@ -52,7 +52,7 @@ export default {
             return array;
         },
         takenSeats(){
-            return [2,3]
+            return [9,10,3,45]
         },
         currentPassengerSelected(){
             return this.selectedFilter.passengersInfo[this.currentPassenger - 1]
@@ -75,14 +75,14 @@ export default {
 
             const passengerInfoUpdated = {
                 ...this.selectedFilter.passengersInfo[this.currentPassenger - 1],
-                NumeroAsientoIda: index + 1
+                NumeroAsientoVuelta: index + 1
             }
 
 
             this.passengersUpdated.push(passengerInfoUpdated);
             if(this.selectedFilter.passengersInfo.length === this.currentPassenger){
                 this.$store.dispatch('flight/updatePassengersInfo', this.passengersUpdated);        
-                this.$router.push({name: 'asientosVuelta'})
+                this.$router.push({name: 'resumen'})
             }
 
             this.currentPassenger += 1;
