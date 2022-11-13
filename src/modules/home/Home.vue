@@ -154,6 +154,7 @@ export default {
 
   },
   async created(){
+    await this.$store.dispatch('flight/purgeFilters')
     await this.$store.dispatch('airport/obtenerAeropuertos')
   },  
   methods: {

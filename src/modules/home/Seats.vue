@@ -41,7 +41,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
+        ...mapGetters('flight', ['selectedFilter', 'selectedFlight', 'reservationsGo']),
         seats(){
             let array = []
 
@@ -63,11 +63,11 @@ export default {
     },
     methods: {
         isSeatTaken(index){
-            return this.takenSeats.includes(index + 1)
+            return this.reservationsGo.includes(index + 1)
         },
         seleccionarAsiento(index){
 
-            if(this.selectedSeats.includes(index + 1) || this.takenSeats.includes(index + 1)){
+            if(this.selectedSeats.includes(index + 1) || this.reservationsGo.includes(index + 1)){
                 return
             }
 
@@ -98,7 +98,9 @@ export default {
         }
     },
     created(){
-    }
+        // console.log('klk');
+        this.$store.dispatch('flight/getReservation', {flightId: this.selectedFlight.departure.id, flightType: 'go' });
+    },
 }
 </script>
 

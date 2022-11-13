@@ -28,7 +28,7 @@
               </div>  
               <div class="col-4">
                 <label for="card-expires" class="mt-4 ">CVC</label>
-                <input type="text" class="form-control w-75" id="card-expires" maxlength="3">
+                <input type="text" class="form-control w-75" id="card-expires" maxlength="3" v-model="cvc">
               </div>
             </div>
             
@@ -44,7 +44,7 @@
       <form class="mt-5 col-4">
         <div>
           <label for="exampleInputEmail1">Dirección de correo</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" >
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="mainMail">
           <small id="emailHelp" class="form-text text-muted">Aquí llegará la factura con el recibo de compra</small>
 
         </div>
@@ -52,10 +52,16 @@
     <div class="col-4"></div>    
    </div>
   
-    <div class="buttons" style="text-align: center; margin-top: 50px;" @click="completarPago">
+    <div class="buttons" style="text-align: center; margin-top: 50px;">
 
-      <button class="btn btn-success">
-        Completar pago
+      <button class="btn btn-success" @click="completarPago">
+        <span v-if="!loading">
+            Completar pago
+        </span>
+        <span class="buying" v-else>
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Agendando
+        </span>
       </button>
 
     </div>
@@ -64,15 +70,20 @@
 
 <script>
 import Swal from 'sweetalert2'
+import { mapGetters } from 'vuex';
 
 export default {
   data(){
     return{
       cardNumber: '',
-      expireDate: ''
+      expireDate: '',
+      mainMail: '',
+      cvc: '',
+      loading: false
     }
   },
   computed:{
+    ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
     cardNumberFormat(){
       let newString = '';
       for (let i = 0; i < this.cardNumber.length; i++) {
@@ -99,23 +110,74 @@ export default {
     }
   },
   methods: {
-    completarPago(){
-      if(this.cardNumber.length !== 16 || this.expireDate.length !== 4){
+    async completarPago(){
+      
+      this.loading = true;
+
+      if(this.cardNumber.length !== 16 || this.expireDate.length !== 4 || this.mainMail === '' || this.cvc === ''){
         Swal.fire({
           icon: 'error',
           title: 'INCOMPLETO',
           text: 'Los datos de pago son obligatorios para completar la transacción.',
         })
+        this.loading = false;
         return
       }
- 
+
+      let datosAgenda = {
+        vueloIdaId: this.selectedFlight.arrive.id,
+        vueloVueltaId: this.selectedFlight.departure.id,
+        pasajeros: [],
+        mailConfirmacion: this.mainMail
+      }
+
+      this.selectedFilter.passengersInfo.forEach(passenger => {
+        const passengerNew = {
+          nombre: passenger.Nombre,
+          fechaNacimiento: passenger.FechaNacimiento,
+          cedula: passenger.Cedula,
+          numeroPasaporte: passenger.Pasaporte,
+          numeroAsientoIda: passenger.NumeroAsientoIda,
+          numeroAsientoVuelta: passenger.NumeroAsientoVuelta,
+          sexo: 'M'
+        }
+        datosAgenda.pasajeros.push(passengerNew)
+      });
+
+      await this.$store.dispatch('flight/createReservation', datosAgenda)
+
+
+      this.loading = false
       Swal.fire({
           icon: 'success',
           title: 'Compra completada',
           text: 'Por favor revise su correo.',
-        })
+      });
+      this.$router.push({name: 'home'});
 
-    }
+      // console.log(datosAgenda);
+
+
+    },
+    // validarDatosPago(){
+    //   let valid = true;
+
+    //   if(this.cardNumber.length !== 16 || this.expireDate.length !== 4){
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'INCOMPLETO',
+    //       text: 'Los datos de pago son obligatorios para completar la transacción.',
+    //     })
+    //     return
+    //   }
+ 
+    //   Swal.fire({
+    //       icon: 'success',
+    //       title: 'Compra completada',
+    //       text: 'Por favor revise su correo.',
+    //     })
+    // }
+
   }
 }
 </script>

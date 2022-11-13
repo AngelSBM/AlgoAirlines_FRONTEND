@@ -61,7 +61,7 @@
             </div>
             <div class="flight-price">
                 <div class="price">
-                    $500
+                    ${{ flight.precio }}
                 </div>
                 <div class="description">
                     Ida y vuelta

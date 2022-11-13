@@ -41,7 +41,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('flight', ['selectedFilter', 'selectedFlight']),
+        ...mapGetters('flight', ['selectedFilter', 'selectedFlight', 'reservationsBack']),
         seats(){
             let array = []
 
@@ -57,17 +57,18 @@ export default {
         currentPassengerSelected(){
             return this.selectedFilter.passengersInfo[this.currentPassenger - 1]
         }
-        // isSelected(){
-        //     return this.seats
-        // }
+    },
+    async created(){
+        // console.log('klk');
+        await this.$store.dispatch('flight/getReservation', {flightId: this.selectedFlight.arrive.id, flightType: 'back' });
     },
     methods: {
         isSeatTaken(index){
-            return this.takenSeats.includes(index + 1)
+            return this.reservationsBack.includes(index + 1)
         },
         seleccionarAsiento(index){
 
-            if(this.selectedSeats.includes(index + 1) || this.takenSeats.includes(index + 1)){
+            if(this.selectedSeats.includes(index + 1) || this.reservationsBack.includes(index + 1)){
                 return
             }
 
@@ -97,8 +98,6 @@ export default {
             return this.selectedSeats.includes(index + 1)
         }
     },
-    created(){
-    }
 }
 </script>
 

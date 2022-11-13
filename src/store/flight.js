@@ -16,13 +16,17 @@ export default {
             departure: null,
             arrive: null
         },
-        flights: []
+        flights: [],
+        reservationsGo: [],
+        reservationsBack: []
     },
 
     getters: {
         selectedFilter: state => state.selectedFilter,
         selectedFlight: state => state.selectedFlight,
         flights: state => state.flights,
+        reservationsGo: state => state.reservationsGo,
+        reservationsBack: state => state.reservationsBack,
     },
 
     mutations: {
@@ -48,6 +52,14 @@ export default {
             }
         },     
 
+        setReservationsGo(state, reservationsGo){
+            state.reservationsGo = reservationsGo;
+        },
+
+        setReservationsBack(state, reservationsBack){
+            state.reservationsBack = reservationsBack;
+        },
+
         setPassengers(state, passengers){
             state.selectedFilter.passengersInfo = passengers;
         },
@@ -66,6 +78,20 @@ export default {
 
         deleteSelectedFlight(state){
             state.selectedFlight.departure = null
+        },
+        cleanFilters(state){
+            
+            state.selectedFilter.placeFrom = null
+            state.selectedFilter.placeTo = null
+            state.selectedFilter.dateFrom = null
+            state.selectedFilter.dateTo = null
+            state.selectedFilter.passengers = 0
+            state.selectedFilter.passengersInfo = []
+            state.selectedFlight.departure = null
+            state.selectedFlight.arrive = null
+            state.flights = [],
+            state.reservationsGo = [],
+            state.reservationsBack = []
         }
     },
 
@@ -95,6 +121,24 @@ export default {
             commit('setPassengersNumber', number)
         },
 
+        async getReservation({commit}, {flightId, flightType}){
+
+            const response = await api.getReservations(flightId);
+
+            if(flightType === 'go'){
+                commit('setReservationsGo', response)
+            }
+
+            if(flightType === 'back'){
+                commit('setReservationsBack', response)
+            }
+
+        },
+
+        async createReservation({commit}, agenda){
+            await api.postReservation(agenda);
+        },
+
         async selectDepartureFlight({commit}, flight){
             commit('setDepartureFlight', flight)
         },
@@ -109,6 +153,10 @@ export default {
 
         async deleteSelectedFlight({commit}){
             commit('deleteSelectedFlight')
+        },
+
+        async purgeFilters ({commit}){
+            commit('cleanFilters')
         }
 
     },
