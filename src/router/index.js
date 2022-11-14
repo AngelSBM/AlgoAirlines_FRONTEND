@@ -32,35 +32,42 @@ const routes = [
     path: '/asientos',
     name: 'asientos',
     component: function () {
-      return import(/* webpackChunkName: "passengers" */ '@/modules/home/Seats')
+      return import(/* webpackChunkName: "seats" */ '@/modules/home/Seats')
     }    
   },
   {
     path: '/asientos-vuelta',
     name: 'asientosVuelta',
     component: function () {
-      return import(/* webpackChunkName: "passengers" */ '@/modules/home/SeatsBack')
+      return import(/* webpackChunkName: "seatsback" */ '@/modules/home/SeatsBack')
     }    
   },
   {
     path: '/resumen',
     name: 'resumen',
     component: function () {
-      return import(/* webpackChunkName: "passengers" */ '@/modules/home/Resume')
+      return import(/* webpackChunkName: "resume" */ '@/modules/home/Resume')
     }    
   },
   {
     path: '/login',
     name: 'login',
     component: function () {
-      return import(/* webpackChunkName: "passengers" */ '@/modules/oficial/Login')
+      return import(/* webpackChunkName: "login" */ '@/modules/oficial/Login')
     }    
   },
   {
     path: '/admin',
     name: 'admin',
     component: function () {
-      return import(/* webpackChunkName: "passengers" */ '@/modules/oficial/AdminDashboard')
+      return import(/* webpackChunkName: "admin" */ '@/modules/oficial/AdminDashboard')
+    }    
+  },
+  {
+    path: '/no-permiso',
+    name: 'noPermiso',
+    component: function () {
+      return import(/* webpackChunkName: "noallowed" */ '@/modules/oficial/NoAllowed')
     }    
   },
 ]
@@ -79,7 +86,7 @@ router.beforeEach( async (to, from, next) => {
     const isAuth = store.getters['flight/isAdmin'];
 
     if(!isAuth){
-      next({name: 'home'})
+      next({name: 'noPermiso'})
     }else{ next() }
   }
 

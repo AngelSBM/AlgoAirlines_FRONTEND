@@ -28,7 +28,7 @@ export default {
         flights: state => state.flights,
         reservationsGo: state => state.reservationsGo,
         reservationsBack: state => state.reservationsBack,
-        isdmin: state => state.isAdmin
+        isAdmin: state => state.isAdmin
     },
 
     mutations: {
@@ -164,8 +164,13 @@ export default {
             commit('cleanFilters')
         },
         async login({commit}, credentials){
-            const response  = api.login(credentials);
-            commit('setPermission', response)
+            try {
+                const response = await api.login(credentials);
+                commit('setPermission', response)                
+            } catch (error) {
+
+                throw error;
+            }
         }
 
     },

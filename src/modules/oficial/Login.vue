@@ -8,7 +8,7 @@
                 Correo:
             </div>
             <div class="field-input">
-                <input type="text" placeholder="Escriba aquí">
+                <input type="text" placeholder="Escriba aquí" v-model="correo">
             </div>
         </div>
         <div class="field">
@@ -16,20 +16,73 @@
                 Contraseña:
             </div>
             <div class="field-input">
-                <input type="text" placeholder="Escriba aquí">
+                <input type="password" placeholder="Escriba aquí" v-model="pass">
             </div>
         </div>
 
         <div class="button">
-            <button @click="$router.push({name:'admin'})">Ingresar</button>
+            <button @click="login">Ingresar</button>
         </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import { mapGetters } from "vuex";
 
+import store from "@/store";
+import Swal from "sweetalert2";
+
+export default {
+    
+    data(){
+        return {
+            correo: '',
+            pass: ''
+        }
+    },
+    computed: {
+        ...mapGetters('flight', ['isAdmin']),
+    },  
+    methods: {
+        async login(){
+
+            if(this.correo === '' || this.pass === ''){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'INCOMPLETO',
+                    text: 'Los campos son obligatorios',
+                })
+                return
+            }
+
+            const credentials = {
+                email: this.correo,
+                password: this.pass
+            }
+
+            await this.$store.dispatch('flight/login', credentials).then(r => {
+              
+                
+                if(this.isAdmin){
+                    this.$router.push({name:'admin'})
+                }    
+            
+
+            }).catch(error => {
+                Swal.fire({
+                        icon: 'error',
+                        title: 'Lo sentimos',
+                        text: error.response.data,
+                })
+            })
+
+
+
+
+
+        }
+    }
 }
 </script>
 <style scoped>

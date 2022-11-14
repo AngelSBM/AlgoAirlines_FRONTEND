@@ -2,16 +2,16 @@
   <div class="contenedor">
     <div class="sidebar">
         <div class="option">
-            Vuelos
+            <i class="fa-solid fa-plane-circle-check"></i> Vuelos
         </div>
         <div class="option">
-            Pasajeros
+            <i class="fa-solid fa-users"></i> Pasajeros
         </div>
         <div class="option">
-            Itinerarios
+            <i class="fa-solid fa-gauge"></i> Itinerarios
         </div>
         <div class="option">
-            Reservar
+            <i class="fa-solid fa-calendar-days"></i> Reservar
         </div>
     </div>
     <div class="page">
@@ -46,12 +46,18 @@ export default {
     }
 
     .option{
-        margin-top: 20px;
+        text-align: left;
         cursor: pointer;
         height: 20px;
+        width: 50%;
+        margin: 25px auto;
     }
 
     .option:hover{
         opacity: .5;
+    }
+
+    i{
+        margin-right: 15px;
     }
 </style>

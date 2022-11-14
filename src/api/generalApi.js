@@ -24,5 +24,10 @@ export const postReservation = async (agenda) => {
 
 
 export const login = async (credenciales) => {
-    
+    try {
+        const response = await axios.post(`Oficial/Login`, credenciales);
+        return response.data        
+    } catch (error) {
+        throw error
+    }
 }

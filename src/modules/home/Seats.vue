@@ -89,8 +89,10 @@ export default {
             
         },
         deshacerSeleccion(){
-            this.currentPassenger -= 1;
-            this.selectedSeats.pop()
+            if(this.currentPassenger > 1){
+                this.currentPassenger = this.currentPassenger - 1;
+                this.selectedSeats.pop()
+            }
 
         },  
         isSelected(index){
