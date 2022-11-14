@@ -18,7 +18,8 @@ export default {
         },
         flights: [],
         reservationsGo: [],
-        reservationsBack: []
+        reservationsBack: [],
+        isAdmin: false
     },
 
     getters: {
@@ -27,6 +28,7 @@ export default {
         flights: state => state.flights,
         reservationsGo: state => state.reservationsGo,
         reservationsBack: state => state.reservationsBack,
+        isdmin: state => state.isAdmin
     },
 
     mutations: {
@@ -92,6 +94,9 @@ export default {
             state.flights = [],
             state.reservationsGo = [],
             state.reservationsBack = []
+        },
+        setPermission(state, permisison){
+            state.isAdmin = permisison;
         }
     },
 
@@ -157,6 +162,10 @@ export default {
 
         async purgeFilters ({commit}){
             commit('cleanFilters')
+        },
+        async login({commit}, credentials){
+            const response  = api.login(credentials);
+            commit('setPermission', response)
         }
 
     },

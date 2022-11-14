@@ -61,6 +61,14 @@
 
         </div>
     </div>
+    
+
+    
+        <!-- FOOTER -->
+        <div class="footer">
+      <div class="text-footer" @click="$router.push({name: 'login'})">¿Eres oficial? Accede desde aquí</div>
+    </div>
+
   </div>
 </template>
 
@@ -142,4 +150,20 @@ export default {
             }
         }
     }
+
+    .footer{
+        background-color: rgb(12, 5, 24);
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        .text-footer{
+            &:hover{
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
+
 </style>

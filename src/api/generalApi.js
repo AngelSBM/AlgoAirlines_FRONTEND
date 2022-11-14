@@ -21,3 +21,8 @@ export const postReservation = async (agenda) => {
     const response = await axios.post(`Vuelo/Agendar`, agenda);
     return response.data;
 }
+
+
+export const login = async (credenciales) => {
+    
+}
